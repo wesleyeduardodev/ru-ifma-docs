@@ -423,6 +423,67 @@ Investigue e corrija.
 
 ---
 
+### Testando a V1 com Playwright (MCP)
+
+> A V1 está rodando e os bugs foram corrigidos. Agora vamos usar o Claude Code
+> pra **testar a aplicação como um usuário real** — navegando pelo browser.
+>
+> **O que é MCP?** MCP (Model Context Protocol) é um protocolo aberto que conecta
+> o Claude Code a ferramentas externas. Aqui vamos usar o MCP do **Playwright**
+> pra dar ao agente a capacidade de controlar o browser.
+>
+> **Importante:** Playwright não é um agente de IA nem uma skill — é um **framework de automação e testes de aplicações web** criado pela **Microsoft**. O agente de IA (Claude Code) usa o Playwright via MCP como uma **ferramenta**, ganhando a capacidade de controlar o browser.
+>
+> O Playwright MCP permite que o agente abra o navegador, clique em botões, preencha formulários
+> e valide se tudo está funcionando — sem a gente escrever nenhum script de teste.
+
+**Instalar o Playwright MCP e os browsers:**
+
+> No terminal (fora do Claude Code), rode:
+
+```bash
+# 1. Adicionar o Playwright MCP ao Claude Code
+claude mcp add playwright npx @playwright/mcp@latest
+
+# 2. Instalar o Playwright e baixar os browsers
+npm init -y && npm install @playwright/test && npx playwright install
+```
+
+> **Nota:** O `npm init -y` cria um package.json temporário na pasta —
+> sem ele o Playwright não consegue baixar os browsers. Pode ignorar o package.json depois.
+
+> Verifique se conectou. Dentro do Claude Code, digite:
+
+```
+/mcp
+```
+
+> Deve mostrar o servidor `playwright` como ativo.
+
+**Testar — peça pro Claude testar a aplicação pelo browser:**
+
+> Com o backend e frontend rodando, cole este prompt:
+
+```
+Usando o Playwright MCP, teste a aplicação do RU IFMA:
+
+1. Abra http://localhost:5173 e verifique se a página pública carrega
+2. Navegue até /admin/login
+3. Faça login com admin@ifma.edu.br / admin123
+4. Verifique se o dashboard admin carrega após o login
+5. Me diga o que encontrou em cada passo — se algo falhou, descreva o erro
+```
+
+> **Reflexão:** O agente não está só lendo código — ele está **usando a aplicação**
+> como um usuário faria. Isso é poderoso pra testes exploratórios e pra encontrar bugs visuais
+> que não aparecem no código. E a gente não escreveu nenhum script de teste.
+>
+> Vamos ver mais sobre MCP (conectando ao banco de dados) no MÓDULO 04.
+
+**Commit:** não precisa — MCP é configuração local, não vai pro repositório.
+
+---
+
 
 ## MÓDULO 03 — Deploy
 
@@ -659,22 +720,18 @@ ollama run codellama "Escreva uma funcao em Java que recebe uma lista de numeros
 
 ## MÓDULO 04 — Features do Claude Code + Iterações (se der tempo)
 
-> Primeiro vamos explorar features poderosas do Claude Code: MCP (banco + browser), Skills e Subagents.
+> Já vimos o MCP do Playwright em ação testando a V1. Agora vamos explorar mais:
+> MCP conectando ao banco de dados, Skills e Subagents.
 > Isso completa a visão do que a ferramenta oferece.
 > Depois, partimos pras iterações técnicas no projeto — melhorias isoladas que replicam o dia a dia de um dev.
->
-> A V1 está pronta e deployada. Antes de iterar no código, vamos explorar mais capacidades
-> do Claude Code: MCP, Skills e Subagents. Depois voltamos pras melhorias no projeto.
 
 ---
 
 ### Iteração 1 — MCP: Conectando o Claude Code ao PostgreSQL
 
-> **O que é MCP?**
->
-> MCP (Model Context Protocol) é um protocolo aberto que permite conectar o Claude Code
-> a ferramentas externas: bancos de dados, APIs, serviços de monitoramento, etc.
-> Em vez de você copiar e colar queries SQL, o agente acessa o banco direto.
+> Vocês já viram o MCP em ação com o Playwright (testando pelo browser).
+> Agora vamos conectar outro MCP: direto ao **banco de dados PostgreSQL**.
+> Em vez de copiar e colar queries SQL, o agente acessa o banco direto.
 >
 > **Aprofundamento fica pra próxima data** — aqui vamos só conectar e testar.
 
@@ -702,7 +759,7 @@ claude mcp add --transport stdio db -- cmd /c npx -y @bytebase/dbhub --dsn "post
 /mcp
 ```
 
-> Deve mostrar o servidor `db` como ativo.
+> Deve mostrar o servidor `db` como ativo (junto com o `playwright` que já tínhamos).
 
 **Testar — peça pro Claude consultar o banco:**
 
@@ -715,71 +772,15 @@ Usando o MCP do PostgreSQL, me mostra:
 
 > **Reflexão:** O agente está fazendo SELECT direto no banco, sem a gente escrever
 > uma linha de SQL. Ele enxerga o banco como se fosse parte dele.
+> Com dois MCPs (banco + browser) o agente tem uma visão completa do sistema:
+> ele lê o código, consulta os dados e navega na interface.
 > Agora imaginem isso conectado ao banco de produção em modo leitura. O que vocês fariam?
 
 **Commit:** não precisa — MCP é configuração local, não vai pro repositório.
 
 ---
 
-### Iteração 2 — MCP: Testando a aplicação com Playwright
-
-> Acabamos de ver o MCP conectando ao banco. Agora vamos ver outro uso:
-> conectar o Claude Code a um **browser** pra ele navegar e testar a aplicação como um usuário real.
->
-> **Importante:** Playwright não é um agente de IA nem uma skill — é um **framework de automação e testes de aplicações web** criado pela **Microsoft**. O agente de IA (Claude Code) usa o Playwright via MCP como uma **ferramenta**, ganhando a capacidade de controlar o browser.
->
-> O Playwright MCP permite que o agente abra o navegador, clique em botões, preencha formulários
-> e valide se tudo está funcionando — sem a gente escrever nenhum script de teste.
-
-**Instalar o Playwright MCP e os browsers:**
-
-> No terminal (fora do Claude Code), rode:
-
-```bash
-# 1. Adicionar o Playwright MCP ao Claude Code
-claude mcp add playwright npx @playwright/mcp@latest
-
-# 2. Instalar o Playwright e baixar os browsers
-npm init -y && npm install @playwright/test && npx playwright install
-```
-
-> **Nota:** O `npm init -y` cria um package.json temporário na pasta —
-> sem ele o Playwright não consegue baixar os browsers. Pode ignorar o package.json depois.
-
-> Verifique se conectou. Dentro do Claude Code, digite:
-
-```
-/mcp
-```
-
-> Deve mostrar o servidor `playwright` como ativo (junto com o `db` que já tínhamos).
-
-**Testar — peça pro Claude testar a aplicação pelo browser:**
-
-> Com o backend e frontend rodando, cole este prompt:
-
-```
-Usando o Playwright MCP, teste a aplicação do RU IFMA:
-
-1. Abra http://localhost:5173 e verifique se a página pública carrega
-2. Navegue até /admin/login
-3. Faça login com admin@ifma.edu.br / admin123
-4. Verifique se o dashboard admin carrega após o login
-5. Me diga o que encontrou em cada passo — se algo falhou, descreva o erro
-```
-
-> **Reflexão:** Agora o agente não está só lendo código ou banco — ele está **usando a aplicação**
-> como um usuário faria. Isso é poderoso pra testes exploratórios e pra encontrar bugs visuais
-> que não aparecem no código.
->
-> Reparem que com dois MCPs (banco + browser) o agente já tem uma visão muito mais completa
-> do sistema: ele lê o código, consulta os dados e navega na interface.
-
-**Commit:** não precisa — MCP é configuração local, não vai pro repositório.
-
----
-
-### Iteração 3 — Skills: Comandos personalizados no Claude Code
+### Iteração 2 — Skills: Comandos personalizados no Claude Code
 
 > **O que são Skills?**
 >
@@ -840,7 +841,7 @@ Para cada problema encontrado, informe:
 
 ---
 
-### Iteração 4 — Agentes Customizados (Subagents)
+### Iteração 3 — Agentes Customizados (Subagents)
 
 > **O que são Agentes Customizados?**
 >
@@ -931,7 +932,7 @@ Use o agente de documentação para gerar a documentação técnica do backend.
 
 ---
 
-### Iteração 5 — Demo: Argonaut — IA dentro de um software real
+### Iteração 4 — Demo: Argonaut — IA dentro de um software real
 
 > **O que é:** Uma demonstração rápida de um projeto real construído com agentes de IA,
 > mostrando que a IA pode ser **parte** do software, não só a ferramenta que constrói.
@@ -964,7 +965,7 @@ Use o agente de documentação para gerar a documentação técnica do backend.
 
 ---
 
-### Iteração 6 — Adicionar Swagger/OpenAPI no backend
+### Iteração 5 — Adicionar Swagger/OpenAPI no backend
 
 > **O que é:** Documentação interativa da API. Qualquer dev que acessar `/swagger-ui.html` consegue ver e testar todos os endpoints.
 
@@ -990,7 +991,7 @@ Faça o commit dessa alteração no ru-ifma-backend/ com a mensagem "feat: adici
 
 ---
 
-### Iteração 7 — Adicionar logs estruturados no backend
+### Iteração 6 — Adicionar logs estruturados no backend
 
 > **O que é:** Logs que registram o que está acontecendo na aplicação. Essencial pra debugar problemas em produção.
 
@@ -1017,7 +1018,7 @@ Faça o commit no ru-ifma-backend/ com a mensagem "feat: adiciona logs estrutura
 
 ---
 
-### Iteração 8 — Adicionar validações com Bean Validation
+### Iteração 7 — Adicionar validações com Bean Validation
 
 > **O que é:** Validação automática dos dados que chegam na API. Impede que dados inválidos entrem no sistema.
 
@@ -1047,7 +1048,7 @@ Faça o commit no ru-ifma-backend/ com a mensagem "feat: adiciona Bean Validatio
 
 ---
 
-### Iteração 9 — Adicionar paginação nos endpoints de listagem
+### Iteração 8 — Adicionar paginação nos endpoints de listagem
 
 > **O que é:** Quando o sistema tiver muitos cardápios, não dá pra retornar tudo de uma vez. Paginação retorna os dados em blocos.
 
@@ -1073,7 +1074,7 @@ Faça o commit no backend com "feat: adiciona paginação nos endpoints de lista
 
 ---
 
-### Iteração 10 — Melhorar o frontend (loading states e tratamento de erros)
+### Iteração 9 — Melhorar o frontend (loading states e tratamento de erros)
 
 > **O que é:** UX básica — mostrar loading enquanto carrega e mensagens de erro quando algo falha.
 
@@ -1097,7 +1098,7 @@ Faça o commit no ru-ifma-frontend/ com a mensagem "feat: adiciona loading state
 
 ---
 
-### Iteração 11 — Adicionar testes unitários no backend
+### Iteração 10 — Adicionar testes unitários no backend
 
 > **O que é:** Testes automatizados que garantem que o código funciona como esperado.
 
