@@ -565,63 +565,67 @@ npm install -g @openai/codex
 
 ---
 
-**Tarefa: Criar um site portfólio pessoal simples**
+**Tarefa: Criar um site portfolio pessoal simples com cada agente**
 
-> Cada aluno cria uma pasta e abre o agente que escolheu:
+> O instrutor cria 3 pastas no Windows Explorer: `portfolio-gemini`, `portfolio-codex` e `portfolio-claude`.
+> Depois abre o Git Bash dentro de cada pasta e inicia o agente correspondente.
+> O objetivo e mostrar os 3 agentes rodando o mesmo prompt lado a lado,
+> pra turma comparar como cada um trabalha.
 
-```bash
-mkdir meu-portfolio && cd meu-portfolio
+**Terminal 1 — Gemini CLI:** abra o Git Bash na pasta `portfolio-gemini` e rode `npx @google/gemini-cli`
 
-# Se escolheu Gemini CLI:
-npx @google/gemini-cli
+**Terminal 2 — Codex CLI:** abra o Git Bash na pasta `portfolio-codex` e rode `codex`
 
-# Se escolheu Codex CLI:
-codex
-```
+**Terminal 3 — Claude Code:** abra o Git Bash na pasta `portfolio-claude` e rode `claude`
 
-> **Antes de começar — Ollama (IA local):**
->
-> Além de ferramentas na nuvem, existe o **Ollama** — ele roda modelos de IA direto na sua máquina,
-> sem internet e sem depender de nenhum serviço externo. Modelos como Llama, Mistral, CodeGemma, etc.
-> Site: https://ollama.com
->
-> Exemplo rápido (com o Ollama instalado e rodando):
-
-```bash
-ollama run codellama "Escreva uma função em Java que recebe uma lista de números inteiros e retorna apenas os números primos"
-```
-
-> Ele processa tudo localmente. É mais lento que as APIs na nuvem, mas é gratuito,
-> offline e privado. Boa opção pra experimentar no próprio PC.
-
-> Cole o prompt abaixo (funciona igual nos dois):
+> Cole o mesmo prompt nos 3 agentes:
 
 ```
-Crie um site portfólio pessoal simples com HTML, CSS e JavaScript puro (sem frameworks).
+Crie um site portfolio pessoal simples com HTML, CSS e JavaScript puro (sem frameworks).
 
 O site deve ter:
-- Uma página única com scroll suave entre seções
-- Seção "Sobre mim" com nome, foto placeholder e uma breve descrição
-- Seção "Habilidades" com uma lista visual (barras de progresso ou cards)
-- Seção "Projetos" com 3 cards de projetos placeholder (imagem, título, descrição e link)
-- Seção "Contato" com links para GitHub, LinkedIn e email
-- Header fixo com navegação entre seções
+- Uma pagina unica com scroll suave entre secoes
+- Secao "Sobre mim" com nome, foto placeholder e uma breve descricao
+- Secao "Habilidades" com uma lista visual (barras de progresso ou cards)
+- Secao "Projetos" com 3 cards de projetos placeholder (imagem, titulo, descricao e link)
+- Secao "Contato" com links para GitHub, LinkedIn e email
+- Header fixo com navegacao entre secoes
 - Design responsivo e moderno (cores escuras, tipografia limpa)
-- Animações suaves de entrada nas seções (CSS only)
+- Animacoes suaves de entrada nas secoes (CSS only)
 
 Meu nome: Wesley Eduardo
-Meu curso: Sistemas de Informação
+Meu curso: Sistemas de Informacao
 
 Crie todos os arquivos e me diga como abrir no navegador.
 ```
 
-> **Tempo:** ~15-20min. Deixe os alunos explorarem.
-> Incentive a iterarem: "Pede pra mudar a cor", "Pede pra adicionar modo escuro",
-> "Pede pra colocar seus dados reais".
+> **Tempo:** ~15-20min. Deixe os alunos acompanharem os 3 agentes trabalhando.
+> Compare os resultados: qual terminou primeiro? Qual gerou o visual mais bonito?
+> Qual seguiu melhor as instrucoes?
 >
-> **Reflexão (após a turma testar):** A lógica é a mesma independente da ferramenta.
-> Você descreve bem o que quer, o agente constrói, e você revisa e itera.
-> Isso vale pro Claude Code, pro Gemini CLI, pro Codex CLI — pra qualquer agente de codificação.
+> Incentive os alunos a iterarem no terminal deles: "Pede pra mudar a cor",
+> "Pede pra adicionar modo escuro", "Pede pra colocar seus dados reais".
+>
+> **Reflexao (apos a comparacao):** A logica e a mesma independente da ferramenta.
+> Voce descreve bem o que quer, o agente constroi, e voce revisa e itera.
+> Isso vale pro Claude Code, pro Gemini CLI, pro Codex CLI — pra qualquer agente de codificacao.
+
+---
+
+**Ollama — IA local (bonus):**
+
+> Alem de ferramentas na nuvem, existe o **Ollama** — ele roda modelos de IA direto na sua maquina,
+> sem internet e sem depender de nenhum servico externo. Modelos como Llama, Mistral, CodeGemma, etc.
+> Site: https://ollama.com
+>
+> Exemplo rapido (com o Ollama instalado e rodando):
+
+```bash
+ollama run codellama "Escreva uma funcao em Java que recebe uma lista de numeros inteiros e retorna apenas os numeros primos"
+```
+
+> Ele processa tudo localmente. E mais lento que as APIs na nuvem, mas e gratuito,
+> offline e privado. Boa opcao pra experimentar no proprio PC.
 
 ---
 
