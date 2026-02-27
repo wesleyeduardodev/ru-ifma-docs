@@ -713,6 +713,11 @@ ollama run codellama "Escreva uma funcao em Java que recebe uma lista de numeros
 
 > Ele processa tudo localmente. E mais lento que as APIs na nuvem, mas e gratuito,
 > offline e privado. Boa opcao pra experimentar no proprio PC.
+>
+> **Enquanto o Ollama roda o prompt:** abra o Gerenciador de Tarefas (Ctrl+Shift+Esc)
+> e mostre o consumo de CPU, RAM e GPU em tempo real. Os alunos precisam ver o impacto
+> de rodar um modelo localmente — isso deixa claro por que precisa de uma máquina razoável
+> e por que as APIs na nuvem são mais rápidas (o processamento pesado fica no servidor deles).
 
 ---
 
