@@ -1,0 +1,4 @@
+node_modules/
+*.png
+ru-ifma-backend/
+ru-ifma-frontend/
