@@ -163,6 +163,8 @@ claude
 > Antes de colar o prompt, ative o plan mode apertando **Shift+Tab** (o indicador no rodapé muda para "Plan").
 > Isso garante que o Claude só vai planejar, sem executar nada.
 >
+> O prompt abaixo foi gerado com ajuda do próprio Claude — dei um prompt inicial descrevendo o que eu queria e pedi para ele gerar um prompt detalhado para o modo de planejamento.
+>
 > Cole este prompt no Claude Code:
 
 ```
@@ -342,7 +344,7 @@ Continue a implementação de onde parou.
 
 ---
 
-### Passo 10 — Subir o ambiente e testar a V1
+### Passo 9 — Subir o ambiente LOCAL e testar a V1 que foi gerada pelo Claude Code
 
 > Depois que o Claude Code terminar, teste tudo:
 
@@ -368,7 +370,7 @@ Se encontrar algum erro, corrija.
 
 ---
 
-### Passo 11 — Corrigir bugs da V1 (se houver)
+### Passo 10 — Corrigir bugs da V1 (se houver)
 
 > É muito provável que algo não funcione de primeira. **Isso é parte do processo.**
 >
@@ -395,7 +397,13 @@ Investigue e corrija.
 
 ---
 
-### Passo 12 — Commit da V1
+
+## MÓDULO 03 — Deploy
+
+> ~20min | Frontend na Vercel + Backend e banco no Railway
+
+
+### Passo 11 — Commit da V1
 
 > Com tudo funcionando, faça o primeiro commit:
 
@@ -412,6 +420,94 @@ No frontend (ru-ifma-frontend/):
 > **Reflexão:** O Claude Code sabe fazer git add, commit e push sozinho.
 > E é boa prática commitar a V1 antes de começar as melhorias — assim a gente tem um ponto de retorno seguro.
 > Saímos do zero até uma V1 commitada. Quanto tempo vocês acham que levaria fazer isso na mão?
+
+
+---
+
+### Passo 12 — Deploy (frontend na Vercel, backend + banco no Railway)
+
+> **Dica:** Se a demo ao vivo travou em algum ponto e você não conseguiu terminar a V1,
+> agora é a hora de usar o branch `backup`. Faça `git checkout backup` nos dois repos
+> e siga com o deploy normalmente. Os alunos não precisam saber — diga
+> "vou pular pra versão estável pra gente seguir com o deploy".
+
+> **Essa parte é operada pelo instrutor manualmente**, sem o Claude Code.
+> O objetivo é mostrar pros alunos que o projeto sai do localhost e vai pro ar em minutos.
+
+**Antes do deploy, peça pro Claude Code criar o arquivo de configuração da Vercel:**
+
+```
+Crie o arquivo vercel.json na raiz de ru-ifma-frontend/ com a configuração
+de rewrite para SPA (todas as rotas redirecionam pra index.html).
+Faça o commit e push.
+```
+
+---
+
+**Deploy do banco + backend — Railway (primeiro):**
+
+> 1. Acesse [railway.app](https://railway.app) e faça login com GitHub
+> 2. Crie um novo projeto
+> 3. Adicione um serviço **PostgreSQL** (Railway provisiona automaticamente)
+> 4. Adicione um novo serviço importando o repositório `ru-ifma-backend`
+>    - Railway detecta o Dockerfile e builda automaticamente
+>    - Agora configure as variáveis de ambiente no **serviço do backend**:
+>
+> **Como pegar os valores:** clique no serviço **PostgreSQL** no Railway → aba **Variables**.
+> Vai ter um monte de variável parecida. Ignore a maioria. Só use estas 3:
+>
+> | Variável do PostgreSQL (só consultar) | Exemplo de valor |
+> |---|---|
+> | **PGHOST** | `postgres.railway.internal` |
+> | **PGUSER** | `postgres` |
+> | **PGPASSWORD** | `rDAObUomuKvXoLAqKXfcWqXThXNowpVX` |
+>
+> **Como montar a DB_URL:** pegue o valor de **PGHOST** e encaixe nesse modelo:
+>
+> ```
+> jdbc:postgresql://VALOR_DO_PGHOST:5432/railway
+> ```
+>
+> Exemplo real:
+> ```
+> jdbc:postgresql://postgres.railway.internal:5432/railway
+> ```
+>
+> **Agora vá no serviço do backend** → aba **Variables** → crie estas 3 variáveis:
+>
+> | Nome da variável (criar no backend) | Valor (copiar do PostgreSQL) |
+> |---|---|
+> | `DB_URL` | `jdbc:postgresql://postgres.railway.internal:5432/railway` |
+> | `DB_USER` | Copie o valor de **PGUSER** |
+> | `DB_PASSWORD` | Copie o valor de **PGPASSWORD** |
+>
+> **Atenção:** a porta é sempre `5432` e o banco é sempre `railway` no Railway.
+> O que muda entre projetos é o PGHOST e o PGPASSWORD.
+> 5. Após o deploy, copie a **URL pública** do backend
+>
+> **IMPORTANTE — Ajustar o CORS no backend:**
+> O CORS está liberado só pra `localhost:5173`. Antes de deployar o front,
+> atualize o CORS no backend pra aceitar também o domínio da Vercel
+> (ou libere `*` pra simplificar durante a demo). Commit e push.
+
+---
+
+**Deploy do frontend — Vercel (depois):**
+
+> 1. Troque a base URL da API no código
+>    (em `src/services/api.js`) de `http://localhost:8080` para a URL do backend no Railway
+> 2. Commit e push
+> 3. Acesse [vercel.com](https://vercel.com) e faça login com GitHub
+> 4. Clique em **"Add New Project"**
+> 5. Importe o repositório `ru-ifma-frontend`
+> 6. A Vercel detecta o Vite automaticamente — só confirme e clique em **Deploy**
+
+---
+
+> **Mostre a aplicação rodando na URL pública. Abra no celular pra mostrar responsividade.
+> Cadastre um cardápio pelo admin e mostre aparecendo na página pública.**
+>
+> **Resultado:** Tudo online. Saímos do zero ao deploy em uma aula. Isso é o poder de um agente de IA no workflow de um dev.
 
 ---
 
@@ -529,100 +625,9 @@ Crie todos os arquivos e me diga como abrir no navegador.
 
 ---
 
-## MÓDULO 03 — Deploy
 
-> ~20min | Frontend na Vercel + Backend e banco no Railway
 
----
-
-### Passo 14 — Deploy (frontend na Vercel, backend + banco no Railway)
-
-> **Dica:** Se a demo ao vivo travou em algum ponto e você não conseguiu terminar a V1,
-> agora é a hora de usar o branch `backup`. Faça `git checkout backup` nos dois repos
-> e siga com o deploy normalmente. Os alunos não precisam saber — diga
-> "vou pular pra versão estável pra gente seguir com o deploy".
-
-> **Essa parte é operada pelo instrutor manualmente**, sem o Claude Code.
-> O objetivo é mostrar pros alunos que o projeto sai do localhost e vai pro ar em minutos.
-
-**Antes do deploy, peça pro Claude Code criar o arquivo de configuração da Vercel:**
-
-```
-Crie o arquivo vercel.json na raiz de ru-ifma-frontend/ com a configuração
-de rewrite para SPA (todas as rotas redirecionam pra index.html).
-Faça o commit e push.
-```
-
----
-
-**Deploy do banco + backend — Railway (primeiro):**
-
-> 1. Acesse [railway.app](https://railway.app) e faça login com GitHub
-> 2. Crie um novo projeto
-> 3. Adicione um serviço **PostgreSQL** (Railway provisiona automaticamente)
-> 4. Adicione um novo serviço importando o repositório `ru-ifma-backend`
->    - Railway detecta o Dockerfile e builda automaticamente
->    - Agora configure as variáveis de ambiente no **serviço do backend**:
->
-> **Como pegar os valores:** clique no serviço **PostgreSQL** no Railway → aba **Variables**.
-> Vai ter um monte de variável parecida. Ignore a maioria. Só use estas 3:
->
-> | Variável do PostgreSQL (só consultar) | Exemplo de valor |
-> |---|---|
-> | **PGHOST** | `postgres.railway.internal` |
-> | **PGUSER** | `postgres` |
-> | **PGPASSWORD** | `rDAObUomuKvXoLAqKXfcWqXThXNowpVX` |
->
-> **Como montar a DB_URL:** pegue o valor de **PGHOST** e encaixe nesse modelo:
->
-> ```
-> jdbc:postgresql://VALOR_DO_PGHOST:5432/railway
-> ```
->
-> Exemplo real:
-> ```
-> jdbc:postgresql://postgres.railway.internal:5432/railway
-> ```
->
-> **Agora vá no serviço do backend** → aba **Variables** → crie estas 3 variáveis:
->
-> | Nome da variável (criar no backend) | Valor (copiar do PostgreSQL) |
-> |---|---|
-> | `DB_URL` | `jdbc:postgresql://postgres.railway.internal:5432/railway` |
-> | `DB_USER` | Copie o valor de **PGUSER** |
-> | `DB_PASSWORD` | Copie o valor de **PGPASSWORD** |
->
-> **Atenção:** a porta é sempre `5432` e o banco é sempre `railway` no Railway.
-> O que muda entre projetos é o PGHOST e o PGPASSWORD.
-> 5. Após o deploy, copie a **URL pública** do backend
->
-> **IMPORTANTE — Ajustar o CORS no backend:**
-> O CORS está liberado só pra `localhost:5173`. Antes de deployar o front,
-> atualize o CORS no backend pra aceitar também o domínio da Vercel
-> (ou libere `*` pra simplificar durante a demo). Commit e push.
-
----
-
-**Deploy do frontend — Vercel (depois):**
-
-> 1. Troque a base URL da API no código
->    (em `src/services/api.js`) de `http://localhost:8080` para a URL do backend no Railway
-> 2. Commit e push
-> 3. Acesse [vercel.com](https://vercel.com) e faça login com GitHub
-> 4. Clique em **"Add New Project"**
-> 5. Importe o repositório `ru-ifma-frontend`
-> 6. A Vercel detecta o Vite automaticamente — só confirme e clique em **Deploy**
-
----
-
-> **Mostre a aplicação rodando na URL pública. Abra no celular pra mostrar responsividade.
-> Cadastre um cardápio pelo admin e mostre aparecendo na página pública.**
->
-> **Resultado:** Tudo online. Saímos do zero ao deploy em uma aula. Isso é o poder de um agente de IA no workflow de um dev.
-
----
-
-## MÓDULO 05 — Features do Claude Code + Iterações (se der tempo)
+## MÓDULO 04 — Features do Claude Code + Iterações (se der tempo)
 
 > Primeiro vamos explorar features poderosas do Claude Code: MCP (banco + browser), Skills e Subagents.
 > Isso completa a visão do que a ferramenta oferece.
@@ -890,12 +895,46 @@ Use o agente de documentação para gerar a documentação técnica do backend.
 ---
 
 > **Transição:** Agora temos o kit completo do Claude Code: plan mode, memória com CLAUDE.md,
-> plugins, MCP, skills e subagents. Com isso na mão, vamos voltar pro projeto
-> e iterar em cima da V1 — cada prompt abaixo é uma melhoria isolada, como no dia a dia de um dev.
+> plugins, MCP, skills e subagents. Antes de voltar pro código, vamos ver um exemplo real
+> de software que usa IA — pra mostrar que agentes não servem só pra construir, mas também
+> podem ser parte do produto.
 
 ---
 
-### Iteração 5 — Adicionar Swagger/OpenAPI no backend
+### Iteração 5 — Demo: Argonaut — IA dentro de um software real
+
+> **O que é:** Uma demonstração rápida de um projeto real construído com agentes de IA,
+> mostrando que a IA pode ser **parte** do software, não só a ferramenta que constrói.
+
+> **Abra o Argonaut no navegador e demonstre rapidamente.**
+>
+> O Argonaut é uma interface de chat que gerencia deploys no Kubernetes via ArgoCD.
+> Em vez de decorar comandos e navegar painéis, o usuário conversa com uma IA
+> (Claude, OpenAI ou Gemini) e ela traduz os pedidos em chamadas reais pra API do ArgoCD.
+>
+> Exemplos: "sincroniza a aplicação X", "qual o status do deploy?", "lista as apps com erro".
+>
+> O ponto aqui é: durante o curso a gente usou IA como ferramenta de terminal pra **construir** software.
+> Mas a IA também pode ser **parte** do software — embutida no produto, resolvendo problemas reais do usuário.
+>
+> Stack: Next.js 16, React 19, TypeScript, Prisma com SQLite, streaming via SSE,
+> criptografia AES-256-GCM pras credenciais, multi-tenant com isolamento por usuário.
+>
+> Tudo isso foi construído com a ajuda de agentes de codificação — o mesmo fluxo que vocês viram hoje.
+> Agentes construindo software que usa agentes. Pensem nisso.
+
+> **Reflexão:** A gente viu o agente construindo código. Agora vimos um software onde a IA
+> é o produto. Essa é a diferença entre usar IA como ferramenta e usar IA como feature.
+> As duas coisas se complementam — e vocês já sabem fazer as duas.
+
+---
+
+> **Transição:** Agora vamos voltar pro projeto e iterar em cima da V1 —
+> cada prompt abaixo é uma melhoria isolada, como no dia a dia de um dev.
+
+---
+
+### Iteração 6 — Adicionar Swagger/OpenAPI no backend
 
 > **O que é:** Documentação interativa da API. Qualquer dev que acessar `/swagger-ui.html` consegue ver e testar todos os endpoints.
 
@@ -921,7 +960,7 @@ Faça o commit dessa alteração no ru-ifma-backend/ com a mensagem "feat: adici
 
 ---
 
-### Iteração 6 — Adicionar logs estruturados no backend
+### Iteração 7 — Adicionar logs estruturados no backend
 
 > **O que é:** Logs que registram o que está acontecendo na aplicação. Essencial pra debugar problemas em produção.
 
@@ -948,7 +987,7 @@ Faça o commit no ru-ifma-backend/ com a mensagem "feat: adiciona logs estrutura
 
 ---
 
-### Iteração 7 — Adicionar validações com Bean Validation
+### Iteração 8 — Adicionar validações com Bean Validation
 
 > **O que é:** Validação automática dos dados que chegam na API. Impede que dados inválidos entrem no sistema.
 
@@ -978,7 +1017,7 @@ Faça o commit no ru-ifma-backend/ com a mensagem "feat: adiciona Bean Validatio
 
 ---
 
-### Iteração 8 — Adicionar paginação nos endpoints de listagem
+### Iteração 9 — Adicionar paginação nos endpoints de listagem
 
 > **O que é:** Quando o sistema tiver muitos cardápios, não dá pra retornar tudo de uma vez. Paginação retorna os dados em blocos.
 
@@ -1004,7 +1043,7 @@ Faça o commit no backend com "feat: adiciona paginação nos endpoints de lista
 
 ---
 
-### Iteração 9 — Melhorar o frontend (loading states e tratamento de erros)
+### Iteração 10 — Melhorar o frontend (loading states e tratamento de erros)
 
 > **O que é:** UX básica — mostrar loading enquanto carrega e mensagens de erro quando algo falha.
 
@@ -1028,7 +1067,7 @@ Faça o commit no ru-ifma-frontend/ com a mensagem "feat: adiciona loading state
 
 ---
 
-### Iteração 10 — Adicionar testes unitários no backend
+### Iteração 11 — Adicionar testes unitários no backend
 
 > **O que é:** Testes automatizados que garantem que o código funciona como esperado.
 
@@ -1095,13 +1134,13 @@ e a conectividade com o banco. Use Spring Boot Actuator.
 
 ---
 
-## MÓDULO 04 — Finalização
+## MÓDULO 05 — Finalização
 
 > ~20min | READMEs + CLAUDE.md final + Encerramento
 
 ---
 
-### Passo 15 — Criar os READMEs
+### Passo 14 — Criar os READMEs
 
 ```
 Crie os READMEs do projeto:
@@ -1128,7 +1167,7 @@ Faça o commit em cada repo e push.
 
 ---
 
-### Passo 16 — Atualizar os CLAUDE.md com o estado final
+### Passo 15 — Atualizar os CLAUDE.md com o estado final
 
 ```
 Atualize os 3 arquivos CLAUDE.md com o estado final do projeto:
@@ -1143,7 +1182,7 @@ Faça o commit em cada repo e push.
 
 ---
 
-### Passo 17 — Encerramento e recapitulação
+### Passo 16 — Encerramento e recapitulação
 
 > Vamos recapitular o que fizemos hoje.
 
@@ -1160,27 +1199,6 @@ Faça o commit em cada repo e push.
 > 7. Fizemos deploy na Vercel e Railway — saiu do localhost pro mundo
 >
 > "Tudo isso em uma aula. Sem o agente, isso levaria dias."
-
-**Demo rápida: Argonaut — IA dentro de um software real (~3min):**
-
-> Antes de fechar, quero mostrar um projeto que eu construí usando agentes de IA.
->
-> **Abra o Argonaut no navegador e demonstre rapidamente.**
->
-> O Argonaut é uma interface de chat que gerencia deploys no Kubernetes via ArgoCD.
-> Em vez de decorar comandos e navegar painéis, o usuário conversa com uma IA
-> (Claude, OpenAI ou Gemini) e ela traduz os pedidos em chamadas reais pra API do ArgoCD.
->
-> Exemplos: "sincroniza a aplicação X", "qual o status do deploy?", "lista as apps com erro".
->
-> O ponto aqui é: durante o curso a gente usou IA como ferramenta de terminal pra **construir** software.
-> Mas a IA também pode ser **parte** do software — embutida no produto, resolvendo problemas reais do usuário.
->
-> Stack: Next.js 16, React 19, TypeScript, Prisma com SQLite, streaming via SSE,
-> criptografia AES-256-GCM pras credenciais, multi-tenant com isolamento por usuário.
->
-> Tudo isso foi construído com a ajuda de agentes de codificação — o mesmo fluxo que vocês viram hoje.
-> Agentes construindo software que usa agentes. Pensem nisso.
 
 **Pontos-chave pra levar pra casa (~3min):**
 
