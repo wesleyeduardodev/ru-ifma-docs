@@ -317,6 +317,32 @@ Crie os 3 arquivos agora.
 
 ---
 
+### Verificando o uso da sessão — `/context`
+
+> Agora que fizemos a implementação inteira e criamos os arquivos de memória,
+> vamos ver quanto dessa sessão a gente já consumiu.
+
+No Claude Code, digite:
+
+```
+/context
+```
+
+> O comando `/context` mostra o uso de tokens da sessão atual — quanto do contexto
+> já foi consumido e quanto ainda resta. É como olhar o "medidor de combustível" da sessão.
+>
+> **Mostre o resultado pros alunos e comente:**
+>
+> "Olhem quanto a gente já usou só com o build da V1 e a criação dos CLAUDE.md.
+> Quando esse medidor chega perto do limite, a sessão fica mais lenta e o agente
+> pode começar a 'esquecer' coisas do início da conversa. Por isso que existe o
+> `/compact` — ele compacta o histórico pra liberar espaço e a gente poder continuar."
+>
+> **Reflexão:** Isso explica por que criamos os CLAUDE.md. Se a sessão estourar
+> o contexto ou precisar reiniciar, os arquivos de memória garantem que nada se perde.
+
+---
+
 ### Se a sessão travar ou precisar reiniciar
 
 > Isso é **normal** em sessões longas. Mostre pros alunos como lidar:
