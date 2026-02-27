@@ -20,7 +20,12 @@
       "mcp__playwright__browser_select_option",
       "mcp__playwright__browser_take_screenshot",
       "Bash(netstat:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(java:*)",
+      "Bash(mvn compile:*)",
+      "Bash(rm:*)",
+      "Bash(npm install:*)",
+      "Bash(npx vite:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
