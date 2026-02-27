@@ -234,11 +234,29 @@ Me apresenta o plano completo antes de executar qualquer coisa.
 > 1. Revise com os alunos a arquitetura proposta
 > 2. Discuta as entidades, endpoints e telas
 > 3. Se algo não estiver bom, converse com o Claude Code para ajustar
-> 4. **NÃO aprove ainda** — antes vamos criar os arquivos de memória
+> 4. Se tudo estiver ok, aprove o plano e aguarde o Claude finalizar a execução
+> 5. Depois de finalizado, peça para ele criar o Passo 8 (a seguir)
 >
 > **Discussão com a turma:** Vamos olhar o plano que ele montou. Faltou alguma entidade?
 > Por que será que ele separou em Controller, Service e Repository?
 > E se a gente fosse montar esse plano na mão, quanto tempo levaria?
+
+> **Durante a execução (após aprovar o plano):**
+>
+> A partir daqui, o Claude Code vai executar task por task.
+> **Deixe ele trabalhar.** Acompanhe com os alunos o que ele está fazendo.
+> Comente em voz alta: "Vejam, agora ele está criando as entidades...", "Olha ele criando os Records de Request e Response...", etc.
+>
+> **Se ele perguntar algo:** responda e deixe ele continuar.
+> **Se ele travar ou der erro:** é oportunidade de ensino! Mostre como corrigir.
+> **Se a sessão ficar longa:** use `/compact` para compactar o contexto.
+>
+> **Perguntas pro chat durante o build (jogue enquanto o Claude trabalha):**
+> - "Ele tá criando as entidades agora — alguém sabe o que é o @Entity do JPA?"
+> - "Repararam que ele usou Record em vez de class? Por que será?"
+> - "Ele criou um service separado do controller — qual a vantagem disso?"
+> - "Olha ele configurando o CORS — alguém já teve problema com CORS antes?"
+> - "Agora ele tá no frontend — reparem como ele organiza os componentes React"
 
 ---
 
@@ -252,13 +270,13 @@ Me apresenta o plano completo antes de executar qualquer coisa.
 >
 > Vamos criar 3 arquivos de memória: um na raiz (visão global) e um em cada sub-projeto (contexto específico).
 
-> Cole este prompt no Claude Code (ainda na mesma sessão do planejamento):
+> Cole este prompt no Claude Code (na mesma sessão, após a implementação):
 
 ```
-Antes de executar, crie 3 arquivos CLAUDE.md como memória do projeto.
+Agora que a implementação está pronta, crie 3 arquivos CLAUDE.md como memória do projeto.
 Se a sessão cair, esses arquivos permitem retomar de onde parou.
 
-Crie baseado no plano que acabamos de montar:
+Crie baseado no código que acabamos de implementar:
 
 1. ru-ifma/CLAUDE.md (visão global):
    - Stack, estrutura do workspace, como rodar cada parte
@@ -284,7 +302,7 @@ Regras importantes pra incluir nos CLAUDE.md:
 - Frontend: componentes funcionais com hooks, lógica de API separada em services
 - Backend roda pelo IntelliJ, Docker só pro banco
 
-Crie os 3 arquivos agora. NÃO comece a implementação.
+Crie os 3 arquivos agora.
 ```
 
 > **Mostre os 3 arquivos criados e explique:**
@@ -294,40 +312,6 @@ Crie os 3 arquivos agora. NÃO comece a implementação.
 > é o contexto específico, lido só quando o agente trabalha naquela pasta.
 > Mas pra que serve isso se o agente já sabe o que a gente pediu?
 > E o que acontece se a sessão cair agora e a gente não tivesse criado esses arquivos?
-
----
-
-### Passo 9 — Aprovar o plano e construir a V1
-
-> Agora sim! Cole este prompt para o Claude Code executar o plano:
-
-```
-Os arquivos de memória estão prontos. Agora execute o plano completo.
-
-Siga a ordem das tasks. Para cada etapa:
-1. Implemente o código
-2. Verifique se compila/funciona
-3. Siga para a próxima task
-
-Comece pela infraestrutura (docker-compose), depois backend (entidades → services → controllers → auth), depois frontend (páginas → integração com API).
-
-Pode executar.
-```
-
-> A partir daqui, o Claude Code vai executar task por task.
-> **Deixe ele trabalhar.** Acompanhe com os alunos o que ele está fazendo.
-> Comente em voz alta: "Vejam, agora ele está criando as entidades...", "Olha ele criando os Records de Request e Response...", etc.
->
-> **Se ele perguntar algo:** responda e deixe ele continuar.
-> **Se ele travar ou der erro:** é oportunidade de ensino! Mostre como corrigir.
-> **Se a sessão ficar longa:** use `/compact` para compactar o contexto.
->
-> **Perguntas pro chat durante o build (jogue enquanto o Claude trabalha):**
-> - "Ele tá criando as entidades agora — alguém sabe o que é o @Entity do JPA?"
-> - "Repararam que ele usou Record em vez de class? Por que será?"
-> - "Ele criou um service separado do controller — qual a vantagem disso?"
-> - "Olha ele configurando o CORS — alguém já teve problema com CORS antes?"
-> - "Agora ele tá no frontend — reparem como ele organiza os componentes React"
 
 ---
 
@@ -354,7 +338,7 @@ Identifique o que já foi feito e o que falta.
 Continue a implementação de onde parou.
 ```
 
-> **Reflexão:** É exatamente por isso que a gente criou os CLAUDE.md antes de executar. Eles funcionam como um checkpoint — um save game do projeto. Se cair, a gente retoma de onde parou.
+> **Reflexão:** É exatamente por isso que a gente criou os CLAUDE.md logo após implementar. Eles funcionam como um checkpoint — um save game do projeto. Se cair, a gente retoma de onde parou.
 
 ---
 
