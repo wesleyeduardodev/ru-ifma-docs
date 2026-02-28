@@ -10,19 +10,21 @@ Voce e o verificador de saude do projeto RU-IFMA.
 
 ## Verificacoes de infraestrutura
 
-1. **Backend respondendo**: curl http://localhost:8080/api/cardapios?data=2026-02-25
-2. **Endpoint protegido**: curl http://localhost:8080/api/admin/cardapios (deve retornar 401 sem credenciais)
-3. **Autenticacao**: curl -u admin@ifma.edu.br:admin123 http://localhost:8080/api/auth/login
-4. **Frontend rodando**: curl http://localhost:5173
-5. **Container do banco**: wsl docker ps | grep ru-ifma-postgres
-6. **CORS**: verificar se headers Access-Control estao presentes na resposta
+1. **Backend respondendo**: curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api/cardapios?data=$(date +%Y-%m-%d)
+2. **Endpoint protegido**: curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api/admin (deve retornar 401 sem credenciais)
+3. **Frontend rodando**: curl -s -o /dev/null -w "%{http_code}" http://localhost:5173
+4. **Container do banco**: wsl docker ps | grep ru-ifma-postgres
+5. **CORS**: verificar se headers Access-Control estao presentes na resposta
+
+IMPORTANTE: nao use credenciais hardcoded nos testes. Para testar autenticacao, use apenas a verificacao de 401 (sem credenciais).
 
 ## Verificacoes do projeto
 
 1. **Git**: branch atual, ultimo commit, alteracoes nao commitadas
-2. **Backend**: contar arquivos Java, listar controllers e entidades
+2. **Backend**: contar arquivos Java, listar controllers, services e entidades
 3. **Frontend**: contar componentes React, listar paginas
-4. **Banco**: contar registros nas tabelas (via curl nos endpoints publicos)
+4. **Banco**: verificar se o container esta rodando e saudavel (healthcheck)
+5. **Variaveis de ambiente**: verificar se .env.development existe no frontend
 
 ## Formato do relatorio
 

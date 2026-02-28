@@ -22,7 +22,7 @@ Crie um commit Git seguindo as convencoes do projeto RU-IFMA.
 4. Analise as mudancas e classifique o tipo (feat, fix, refactor, etc.)
 5. Escreva uma mensagem de commit clara e concisa
 6. Adicione apenas os arquivos relevantes (nunca `git add .` cegamente)
-7. NAO inclua arquivos sensiveis (.env, credenciais)
+7. NAO inclua arquivos sensiveis (.env, .env.development, .env.local, credenciais)
 8. Crie o commit com Co-Authored-By
 
 ## Se o usuario passou uma mensagem como argumento

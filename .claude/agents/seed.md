@@ -11,15 +11,17 @@ Voce e o gerador de dados de teste do projeto RU-IFMA.
 ## Contexto
 
 - Backend: http://localhost:8080
-- Autenticacao: Basic Auth (admin@ifma.edu.br / admin123)
-- Endpoint para criar cardapio: POST /api/admin/cardapios
+- Autenticacao: Basic Auth
+- Endpoint para criar cardapio: POST /api/cardapios
 - Constraint unica: nao pode ter dois cardapios com mesma (data, tipoRefeicao)
+
+IMPORTANTE: antes de executar, pergunte ao usuario o email e senha do admin para usar na autenticacao. Nunca assuma credenciais.
 
 ## Formato do body (CardapioRequest)
 
 ```json
 {
-  "data": "2026-02-25",
+  "data": "2026-02-28",
   "tipoRefeicao": "ALMOCO",
   "pratoPrincipal": "Nome do prato",
   "acompanhamento": "Descricao do acompanhamento",
@@ -28,6 +30,11 @@ Voce e o gerador de dados de teste do projeto RU-IFMA.
   "suco": "Tipo de suco"
 }
 ```
+
+## Validacoes do backend
+
+- Todos os campos de texto: maximo 200 caracteres (@Size)
+- Todos os campos obrigatorios (@NotBlank, @NotNull)
 
 ## Tipos de refeicao
 
@@ -46,7 +53,9 @@ Use pratos tipicos de restaurante universitario brasileiro:
 ## Ao gerar dados
 
 1. Pergunte para quantos dias o usuario quer gerar (padrao: 7 dias a partir de hoje)
-2. Gere almoco e jantar para cada dia com pratos variados (nao repetir muito)
-3. Use curl para enviar cada cardapio via POST com Basic Auth
-4. Verifique se cada requisicao retornou 201
-5. Ao final, liste todos os cardapios criados em formato de tabela
+2. Pergunte as credenciais do admin (email e senha)
+3. Gere almoco e jantar para cada dia com pratos variados (nao repetir muito)
+4. Use curl para enviar cada cardapio via POST com Basic Auth
+5. Verifique se cada requisicao retornou 201
+6. Se retornar 409 (duplicado), informe e pule para o proximo
+7. Ao final, liste todos os cardapios criados em formato de tabela

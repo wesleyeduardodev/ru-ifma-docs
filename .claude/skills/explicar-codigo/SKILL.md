@@ -16,10 +16,13 @@ Explique **$ARGUMENTS** do projeto RU-IFMA de forma didatica para alunos.
 
 ## Contexto do projeto
 
-- Backend: Spring Boot 4 + Java 21 (arquitetura em camadas)
-- Frontend: React 19 + Vite + TailwindCSS v4
+- Backend: Spring Boot 3.4.3 + Java 21 (arquitetura em camadas: Controller -> Service -> Repository)
+- Frontend: React 19 + Vite 7 + TailwindCSS 4
 - Banco: PostgreSQL 17
-- Auth: HTTP Basic Auth com Spring Security
+- Auth: HTTP Basic Auth com Spring Security + BCrypt strength 12
+- Credenciais no frontend via sessionStorage (interceptor Axios)
+- API URL via variavel de ambiente (VITE_API_URL)
+- Deploy: Frontend na Vercel, Backend no Railway
 
 ## Tom da explicacao
 
@@ -30,9 +33,12 @@ Explique **$ARGUMENTS** do projeto RU-IFMA de forma didatica para alunos.
 
 ## Conceitos que os alunos costumam perguntar
 
-- Como funciona a autenticacao (Basic Auth + Spring Security)
+- Como funciona a autenticacao (Basic Auth + Spring Security + sessionStorage)
 - Fluxo de uma requisicao (Controller -> Service -> Repository)
-- Como o React se comunica com o backend (Axios + interceptor)
-- Como o CORS funciona
+- Como o React se comunica com o backend (Axios + interceptors)
+- Como o CORS funciona (CorsConfig com variavel de ambiente)
 - O que sao DTOs e por que usar Records
 - Como o TailwindCSS v4 funciona sem tailwind.config.js
+- Como funcionam os profiles do Spring (dev vs prod)
+- O que e rate limiting e por que usar
+- Como variaveis de ambiente funcionam (VITE_API_URL, CORS_ORIGINS, etc)
