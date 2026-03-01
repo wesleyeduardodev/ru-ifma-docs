@@ -28,7 +28,8 @@
       "Bash(npx vite:*)",
       "Bash(xargs grep:*)",
       "Bash(npx:*)",
-      "Bash(where psql:*)"
+      "Bash(where psql:*)",
+      "Bash(python3:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

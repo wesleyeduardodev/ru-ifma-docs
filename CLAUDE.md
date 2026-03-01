@@ -5,7 +5,7 @@
 - **Backend:** Java 21 + Spring Boot 3.4.3 + Spring Security + Spring Data JPA
 - **Frontend:** React 19 + Vite 7 + TailwindCSS 4 + React Router DOM
 - **Banco:** PostgreSQL 17 (via Docker Compose)
-- **Autenticacao:** HTTP Basic Auth com BCrypt (strength 12)
+- **Autenticacao:** JWT + Refresh Token com BCrypt (strength 12)
 - **Deploy:** Frontend na Vercel, Backend no Railway
 
 ## Estrutura do workspace
@@ -40,6 +40,7 @@ Admin padrao: `admin@ifma.edu.br` (protegido - nao pode ser excluido)
 - `DB_URL`, `DB_USER`, `DB_PASSWORD` - conexao com o banco
 - `SPRING_PROFILES_ACTIVE` - `dev` (local) ou `prod` (producao)
 - `CORS_ORIGINS` - origens permitidas (separadas por virgula)
+- `JWT_SECRET` - chave secreta para assinar JWT (obrigatoria em prod, base64 encoded)
 
 ## Convencoes obrigatorias
 
